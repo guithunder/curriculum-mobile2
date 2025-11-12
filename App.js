@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import {
   SafeAreaView,
@@ -11,6 +9,7 @@ import {
   TouchableOpacity,
   Modal,
   Pressable,
+  Linking,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 
@@ -23,6 +22,16 @@ export default function App() {
     title: 'Desenvolvedor Front-end / React Native',
     about:
       'Desenvolvedor com 5+ anos de experiência em aplicações mobile e web. Busco oportunidades que permitam aplicar boas práticas em arquitetura, performance e UX, com foco em aplicativos responsivos e escaláveis.',
+
+    // 👇 nova seção de contatos
+    contacts: {
+      email: 'picapaudev@email.com',
+      phone: '+55 (81) 99999-0000',
+      linkedin: 'https://linkedin.com/in/picapaudev',
+      github: 'https://github.com/picapaudev',
+      site: 'https://picapaudev.dev',
+    },
+
     experiences: [
       {
         id: 'e1',
@@ -58,7 +67,7 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <ScrollView contentContainerStyle={styles.scroll}>
-        {/* cabeça */}
+        {/* Cabeçalho */}
         <View style={styles.header}>
           <Image source={{ uri: candidate.photo }} style={styles.photo} />
           <View style={styles.headerText}>
@@ -73,6 +82,25 @@ export default function App() {
           <Text style={styles.paragraph}>{candidate.about}</Text>
         </View>
 
+        {/* 👇 Contatos */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Contatos</Text>
+          <Text style={styles.contactText}>📧 {candidate.contacts.email}</Text>
+          <Text style={styles.contactText}>📱 {candidate.contacts.phone}</Text>
+
+          <TouchableOpacity onPress={() => Linking.openURL(candidate.contacts.linkedin)}>
+            <Text style={[styles.contactText, styles.link]}>🔗 LinkedIn</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => Linking.openURL(candidate.contacts.github)}>
+            <Text style={[styles.contactText, styles.link]}>💻 GitHub</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => Linking.openURL(candidate.contacts.site)}>
+            <Text style={[styles.contactText, styles.link]}>🌐 Portfólio</Text>
+          </TouchableOpacity>
+        </View>
+
         {/* Experiências */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Experiências</Text>
@@ -84,7 +112,9 @@ export default function App() {
             >
               <View>
                 <Text style={styles.itemTitle}>{exp.role}</Text>
-                <Text style={styles.itemSubtitle}>{exp.company} · {exp.period}</Text>
+                <Text style={styles.itemSubtitle}>
+                  {exp.company} · {exp.period}
+                </Text>
               </View>
               <Text style={styles.chevron}>›</Text>
             </TouchableOpacity>
@@ -98,13 +128,15 @@ export default function App() {
             <View key={edu.id} style={styles.listItemStatic}>
               <View>
                 <Text style={styles.itemTitle}>{edu.course}</Text>
-                <Text style={styles.itemSubtitle}>{edu.institution} · {edu.year}</Text>
+                <Text style={styles.itemSubtitle}>
+                  {edu.institution} · {edu.year}
+                </Text>
               </View>
             </View>
           ))}
         </View>
 
-        {/* agilidade */}
+        {/* agilidade ai ai */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Habilidades</Text>
           {candidate.skills.map((skill) => (
@@ -121,7 +153,7 @@ export default function App() {
         <View style={{ height: 32 }} />
       </ScrollView>
 
-      {/* Modal para detalhes d exp */}
+      {/* Modal de experiência */}
       <Modal
         visible={!!selectedExperience}
         animationType="slide"
@@ -131,7 +163,9 @@ export default function App() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalRole}>{selectedExperience?.role}</Text>
-            <Text style={styles.modalCompany}>{selectedExperience?.company} · {selectedExperience?.period}</Text>
+            <Text style={styles.modalCompany}>
+              {selectedExperience?.company} · {selectedExperience?.period}
+            </Text>
             <Text style={styles.modalDesc}>{selectedExperience?.description}</Text>
 
             <Pressable style={styles.closeButton} onPress={() => setSelectedExperience(null)}>
@@ -153,11 +187,30 @@ const styles = StyleSheet.create({
   name: { fontSize: 20, fontWeight: '700' },
   title: { fontSize: 14, color: '#555', marginTop: 4 },
 
-  section: { backgroundColor: '#fff', padding: 12, borderRadius: 10, marginBottom: 12, shadowColor: '#000', shadowOpacity: 0.03, shadowRadius: 4, elevation: 1 },
+  section: {
+    backgroundColor: '#fff',
+    padding: 12,
+    borderRadius: 10,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOpacity: 0.03,
+    shadowRadius: 4,
+    elevation: 1,
+  },
   sectionTitle: { fontSize: 16, fontWeight: '700', marginBottom: 8 },
   paragraph: { fontSize: 14, color: '#444', lineHeight: 20 },
 
-  listItem: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: 10, borderBottomColor: '#eee', borderBottomWidth: 1 },
+  contactText: { fontSize: 14, color: '#333', marginBottom: 6 },
+  link: { color: '#1d6fa5', textDecorationLine: 'underline' },
+
+  listItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomColor: '#eee',
+    borderBottomWidth: 1,
+  },
   listItemStatic: { paddingVertical: 10, borderBottomColor: '#eee', borderBottomWidth: 1 },
   itemTitle: { fontSize: 15, fontWeight: '600' },
   itemSubtitle: { fontSize: 13, color: '#666', marginTop: 4 },
@@ -165,15 +218,34 @@ const styles = StyleSheet.create({
 
   skillRow: { marginBottom: 10 },
   skillName: { fontSize: 14, fontWeight: '600', marginBottom: 6 },
-  skillBarBackground: { width: '100%', height: 10, backgroundColor: '#eee', borderRadius: 20, overflow: 'hidden' },
+  skillBarBackground: {
+    width: '100%',
+    height: 10,
+    backgroundColor: '#eee',
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
   skillBarFill: { height: '100%', borderRadius: 20, backgroundColor: '#4f94a9' },
   skillPercent: { marginTop: 6, fontSize: 12, color: '#666' },
 
   modalOverlay: { flex: 1, justifyContent: 'flex-end', backgroundColor: 'rgba(0,0,0,0.35)' },
-  modalContent: { backgroundColor: '#fff', padding: 20, borderTopLeftRadius: 16, borderTopRightRadius: 16, minHeight: 240 },
+  modalContent: {
+    backgroundColor: '#fff',
+    padding: 20,
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+    minHeight: 240,
+  },
   modalRole: { fontSize: 18, fontWeight: '700' },
   modalCompany: { color: '#666', marginTop: 6, marginBottom: 12 },
   modalDesc: { fontSize: 14, lineHeight: 20, color: '#444' },
-  closeButton: { marginTop: 18, alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 20, borderRadius: 8, backgroundColor: '#346a74' },
+  closeButton: {
+    marginTop: 18,
+    alignSelf: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    backgroundColor: '#346a74',
+  },
   closeButtonText: { color: '#fff', fontWeight: '700' },
 });
