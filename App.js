@@ -23,7 +23,7 @@ export default function App() {
     about:
       'Desenvolvedor com 5+ anos de experiência em aplicações mobile e web. Busco oportunidades que permitam aplicar boas práticas em arquitetura, performance e UX, com foco em aplicativos responsivos e escaláveis.',
 
-    // 👇 nova seção de contatos
+    // contatos
     contacts: {
       email: 'picapaudev@email.com',
       phone: '+55 (81) 99999-0000',
